@@ -5,4 +5,4 @@ class SimpleTest(TestCase):
         pass
 
     def test_simple(self):
-        pass
+        self.fail()
