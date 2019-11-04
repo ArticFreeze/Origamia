@@ -1,5 +1,9 @@
 
 from django.http import HttpResponse
 
+from django.shortcuts import render
+
+
 def game_view(request):
-    return HttpResponse("<html>Hello World!</html>")
+
+    return render(request, 'Game/index.html')
