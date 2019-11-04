@@ -11,12 +11,12 @@ matrix:
     
     language: node_js
     node_js:
-      -7
+      - "stable"
     cache: 
       directories: 
         -node_modules
     install:
-      - npm install
+      - nvm install -stable
       - npm install -g create-react-app
     script: 
       - npm run test --prefix game
