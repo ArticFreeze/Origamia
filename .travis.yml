@@ -16,6 +16,6 @@ matrix:
       directories: 
         - "node_modules"
     install:
-      - nvm install v13.0.1
+      - nvm install v13.0.1 --prefix game
     script: 
       - npm run test --prefix game
