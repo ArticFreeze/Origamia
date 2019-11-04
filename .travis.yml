@@ -14,7 +14,7 @@ matrix:
       - "stable"
     cache: 
       directories: 
-        -node_modules
+        - "node_modules"
     install:
       - nvm install -stable
       - npm install -g create-react-app
