@@ -6,7 +6,7 @@ cache:
 directories: 
  - "node_modules"
 install:
-  - pip install -r requirements.txt
+ - pip install -r requirements.txt
  - nvm install v13.0.1
  - npm install --prefix game
 script:
