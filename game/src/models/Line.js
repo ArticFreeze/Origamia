@@ -8,7 +8,7 @@ class Line{
     }
 }
 
-intersect = (l1,l2) => {
+export const intersect = (l1,l2) => {
     const l1p1 = l1.p1;
     const l1p2 = l1.p2;
     const a1 = l1p1.y-l1p2.y;
@@ -31,7 +31,6 @@ intersect = (l1,l2) => {
 
 
     return new Point(x,y);
-}
+};
 
 export default Line;
-export {intersect};
