@@ -33,4 +33,5 @@ intersect = (l1,l2) => {
     return new Point(x,y);
 }
 
-export default Line
+export default Line;
+export {intersect};
