@@ -24,8 +24,8 @@ class GameCanvas extends React.Component {
     componentDidMount() {
         const canvas = this.refs.canvas; //saving canvas elem to var
         var ctx = canvas.getContext("2d"); //drawing object, will be drawing on this
-        ctx.lineWidth = 2;
-        if (ctx != null) {
+        if (ctx != null) {  
+         ctx.lineWidth = 2;
           this.state.lines.forEach(line => {
             ctx.beginPath();
             ctx.moveTo(line.p1.x,line.p1.y);
