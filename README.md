@@ -1,5 +1,5 @@
 # Origamia
-
+https://travis-ci.org/ArticFreeze/Origamia.svg?branch=master
 Starting
 
 To start the backend:
