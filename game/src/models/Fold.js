@@ -17,8 +17,8 @@ class Fold {
      * @param  p2 The second point to fold through
      */
     constructor(p1,p2) {
-        this.p1 = p1
-        this.p2 = p2
+        this.p1 = p1;
+        this.p2 = p2;
     }
 
     /**
@@ -47,12 +47,11 @@ class Fold {
         }
 
         var lineAB = new Line(this.p1, this.p2)
-        var tempP = new Point(p.y, 0-p.x)
+        var tempP = new Point(p.x+this.p2.y-this.p1.y, p.y+this.p1.x-this.p2.x);
         var lineCD = new Line(p, tempP)
         var halfwayPoint = intersect(lineAB, lineCD)
         const tempX = p.x - 2 * (p.x - halfwayPoint.x)
-        const tempY = p.y - 2 * (p.y - halfwayPoint.y)
-        console.log(tempX, tempY)
+        const tempY = p.y - 2 * (p.y - halfwayPoint.y);
         var foldPoint = new Point(tempX, tempY)
 
         return foldPoint
