@@ -57,7 +57,7 @@ class Fold {
         return foldPoint
     }
 
-    /**w
+    /**
      * Given a point after the fold, returns where the point ends up before the fold.
      * @param p the point (given after the fold is made)
      * @returns where the point will end up after the fold is reversed
