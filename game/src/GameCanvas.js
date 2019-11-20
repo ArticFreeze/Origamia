@@ -4,24 +4,28 @@ import './App.css';
 import Point from './models/Point';
 import Line from './models/Line';
 import GameState from './models/GameState';
+import { BasePoint, IntersectPoint } from './models/DependentPoint';
+import { ThroughLine, BetweenLine } from './models/DependentLine';
 class GameCanvas extends React.Component {
 
   state = {
-    points: [
-      new Point(400,200),
-      new Point(300,500)
-    ],
-    lines: [
-      new Line(new Point(0,0),new Point(640,600)),
-      new Line(new Point(0,600),new Point(640,0))
-    ]
+    points:[],
+    lines:[]
   }
 
   constructor(props) {
     super(props);
+    var bp1 = new BasePoint(new Point(400,0));
+    var bp2 = new BasePoint(new Point(0,400));
+    var thrl1 = new ThroughLine(bp1, bp2);
+    var btl1 = new BetweenLine(bp1, bp2);
+    var intersect = new IntersectPoint(thrl1, btl1);
+    this.viewModel = new GameState([bp1, bp2, intersect], [thrl1, btl1]);
+    this.state = this.viewModel.getPointsAndLines();
   }
 
     componentDidMount() {
+        console.log("Drawing");
         const canvas = this.refs.canvas; //saving canvas elem to var
         var ctx = canvas.getContext("2d"); //drawing object, will be drawing on this
         if (ctx != null) {  
