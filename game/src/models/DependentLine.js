@@ -42,7 +42,8 @@ export class BetweenLine extends DependentLine {
         var cp2 = this.p2.getPoint();
         var op1 = new Point((cp1.x+cp2.x)/2,(cp1.y+cp2.y)/2);
         var op2 = new Point(op1.x+(cp2.y-cp1.y),op1.y+(cp1.x-cp2.x));
-        return new Line(op1,op2);
+        var op3 = new Point(op1.x-(cp2.y-cp1.y),op1.y-(cp1.x-cp2.x));
+        return new Line(op2,op3);
     }
 
 }
