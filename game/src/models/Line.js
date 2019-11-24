@@ -7,7 +7,13 @@ class Line{
         this.p2 = Point2;
     }
 }
-
+/**
+    * Given 2 lines, returns the intersection point of those lines, or null if there is
+    * no intersection point
+    * @param l1 the first line
+    * @param l2 the second line
+    * @returns the intersection point of the two lines or null if it doesn't exist
+    */
 export const intersect = (l1,l2) => {
     const l1p1 = l1.p1;
     const l1p2 = l1.p2;
@@ -25,10 +31,6 @@ export const intersect = (l1,l2) => {
     }
     const x = (c1*b2-c2*b1)/det;
     const y = (a1*c2-a2*c1)/det;
-
-
-
-
 
     return new Point(x,y);
 };

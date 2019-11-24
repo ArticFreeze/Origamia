@@ -51,10 +51,16 @@ it('Test Intersect 6: BothNegativeSlopes', () => {
     test.assert.equal(lPoint.y,3);
 });
 
-it('Test Intersect 7: ', () => {
+it('Test Intersect 7: base 2', () => {
     var l1 = new Line(new Point(-1, -1), new Point(1,1));
     var l2 = new Line(new Point(-1 , 1), new Point(1, -1));
     var iPoint = intersect(l1, l2);
     test.assert.equal(iPoint.x, 0);
     test.assert.equal(iPoint.y, 0);
+})
+
+it('Test Intersect 8: No intersection point' , () => {
+    var l1 = new Line(new Point(-2, -2), new Point(2, 2));
+    var l2 = new Line(new Point(-1, -1), new Point(3, 3));
+    test.assert.deepEqual(intersect(l1,l2), null);
 })

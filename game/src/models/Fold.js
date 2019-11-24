@@ -30,7 +30,6 @@ class Fold {
 
         if (this.p1.y == this.p2.y) { //horizontal fold
             var yHor = p.y - ( ( p.y - this.p1.y ) * 2)
-            //yCoord = p.y - yCoord
             var xHor = p.x
             return new Point(xHor, yHor)
         }
@@ -41,18 +40,20 @@ class Fold {
             return new Point(xVert, yVert)
         }
 
-        //TODO: may need to verify that p1 and p2 don't need to be switched
-        if ((this.p1.x * this.p2.y + p.x * this.p1.y + this.p2.x * p.y - p.x * this.p2.y - this.p2.x * this.p1.y - this.p1.x * p.y) < 0) { //if point is right of line
-            return new Point(p.x, p.y)
+        //checks if a point is to the right of a line via the determinate method
+        if ((this.p1.x * this.p2.y + p.x * this.p1.y + this.p2.x * p.y
+             - p.x * this.p2.y - this.p2.x * this.p1.y - this.p1.x * p.y) < 0) {
+                return new Point(p.x, p.y)
         }
 
-        var lineAB = new Line(this.p1, this.p2)
-        var tempP = new Point(p.x+this.p2.y-this.p1.y, p.y+this.p1.x-this.p2.x);
-        var lineCD = new Line(p, tempP)
-        var halfwayPoint = intersect(lineAB, lineCD)
-        const tempX = p.x - 2 * (p.x - halfwayPoint.x)
-        const tempY = p.y - 2 * (p.y - halfwayPoint.y);
-        var foldPoint = new Point(tempX, tempY)
+        //following handles normal folds over a point left of the line over that line
+        const lineAB = new Line(this.p1, this.p2)
+        const tempP = new Point(p.x+this.p2.y-this.p1.y, p.y+this.p1.x-this.p2.x);
+        const lineCD = new Line(p, tempP)
+        const halfwayPoint = intersect(lineAB, lineCD)
+        const foldedX = p.x - 2 * (p.x - halfwayPoint.x)
+        const foldedY = p.y - 2 * (p.y - halfwayPoint.y);
+        var foldPoint = new Point(foldedX, foldedY)
 
         return foldPoint
     }
