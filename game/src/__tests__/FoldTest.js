@@ -79,3 +79,21 @@ it('No side effects', () => {
     test.assert.equal(f1.p2.x, 1);
     test.assert.equal(f1.p2.y, 1);
 });
+
+//-------------------------------------------------
+
+it('Intersect point created', () => {
+
+});
+
+it('Standard fold: fold line created', () => {
+
+});
+
+it('Standard fold: fold point created', () => {
+
+});
+
+it('No side effects created', () => {
+
+});
