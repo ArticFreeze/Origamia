@@ -8,9 +8,9 @@ import DependentLine from './DependentLine';
  */
 class GameState {
 
-    constructor(depPoints,depLines) {
-        this.depPoints=depPoints;
-        this.depLines=depLines;
+    constructor(depPoints, depLines) {
+        this.depPoints = depPoints;
+        this.depLines = depLines;
     }
 
     /**
@@ -18,17 +18,9 @@ class GameState {
      * @returns an object with points, the points, and lines, the lines to draw
      */
     getPointsAndLines = () => {
-        var lines = [];
-        var points=[];
-        this.depPoints.forEach(p => {
-            points.push(p.getPoint());
-        });
-        this.depLines.forEach(l => {
-            lines.push(l.getLine());
-        });
-        return {points: points, lines: lines};
+        return { points: this.depPoints.map(dp => dp.getPoint()).filter(p => p != null), lines: this.depLines.map(dl => dl.getLine()).filter(l => l != null) };
     }
-    
+
 }
 
 export default GameState;

@@ -16,7 +16,7 @@ class Fold {
      * @param  p1 The first point to fold through
      * @param  p2 The second point to fold through
      */
-    constructor(p1,p2) {
+    constructor(p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
     }
@@ -29,26 +29,26 @@ class Fold {
     foldPoint = (p) => {
 
         if (this.p1.y == this.p2.y) { //horizontal fold
-            var yHor = p.y - ( ( p.y - this.p1.y ) * 2)
+            var yHor = p.y - ((p.y - this.p1.y) * 2)
             var xHor = p.x
             return new Point(xHor, yHor)
         }
 
-        if (this.p1.x == this.p2.x){ //vertical fold
-            var xVert = p.x - ( ( p.x - this.p1.x) * 2)
+        if (this.p1.x == this.p2.x) { //vertical fold
+            var xVert = p.x - ((p.x - this.p1.x) * 2)
             var yVert = p.y
             return new Point(xVert, yVert)
         }
 
         //checks if a point is to the right of a line via the determinate method
         if ((this.p1.x * this.p2.y + p.x * this.p1.y + this.p2.x * p.y
-             - p.x * this.p2.y - this.p2.x * this.p1.y - this.p1.x * p.y) < 0) {
-                return new Point(p.x, p.y)
+            - p.x * this.p2.y - this.p2.x * this.p1.y - this.p1.x * p.y) < 0) {
+            return new Point(p.x, p.y)
         }
 
         //following handles normal folds over a point left of the line over that line
         const lineAB = new Line(this.p1, this.p2)
-        const tempP = new Point(p.x+this.p2.y-this.p1.y, p.y+this.p1.x-this.p2.x);
+        const tempP = new Point(p.x + this.p2.y - this.p1.y, p.y + this.p1.x - this.p2.x);
         const lineCD = new Line(p, tempP)
         const halfwayPoint = intersect(lineAB, lineCD)
         const foldedX = p.x - 2 * (p.x - halfwayPoint.x)

@@ -1,6 +1,6 @@
 
 
-class Point{
+class Point {
 
     constructor(xPoint, yPoint) {
         this.x = xPoint
