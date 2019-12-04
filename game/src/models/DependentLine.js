@@ -9,6 +9,7 @@ class DependentLine {
 
     /**
      * Gets a concrete line for drawing
+     * @returns {[Line]} All possible concrete lines for drawing.
      */
     getLine = () => {
         throw new Error("Class fails to implement getLine");
@@ -30,10 +31,7 @@ export class BaseLine extends DependentLine {
         this.l = l;
     }
 
-    /**
-     * @returns {Line} The concrete line that arises from resolving this dependent line
-     */
-    getLine = () => this.l;
+    getLine = () => [this.l];
 
 }
 
@@ -54,12 +52,11 @@ export class ThroughLine extends DependentLine {
     }
 
     getLine = () => {
-        const cp1 = this.p1.getPoint();
-        const cp2 = this.p2.getPoint();
-        if (cp1 == null || cp2 == null) {
-            return null;
-        }
-        return new Line(cp1, cp2);
+        return this.p1.getPoint().flatMap(p01 => {
+            return this.p2.getPoint().flatMap(p02 => {
+                return [new Line(p01, p02)];
+            });
+        })
     }
 
 }
@@ -81,15 +78,15 @@ export class BetweenLine extends DependentLine {
     }
 
     getLine = () => {
-        const cp1 = this.p1.getPoint();
-        const cp2 = this.p2.getPoint();
-        if (cp1 == null || cp2 == null) {
-            return null;
-        }
-        const midpoint = new Point((cp1.x + cp2.x) / 2, (cp1.y + cp2.y) / 2);
-        const lp1 = new Point(midpoint.x + (cp2.y - cp1.y), midpoint.y + (cp1.x - cp2.x));
-        const lp2 = new Point(midpoint.x - (cp2.y - cp1.y), midpoint.y - (cp1.x - cp2.x));
-        return new Line(lp1, lp2);
+        return this.p1.getPoint().flatMap(cp1 => {
+            return this.p2.getPoint().flatMap(cp2 => {
+                const midpoint = new Point((cp1.x + cp2.x) / 2, (cp1.y + cp2.y) / 2);
+                const lp1 = new Point(midpoint.x + (cp2.y - cp1.y), midpoint.y + (cp1.x - cp2.x));
+                const lp2 = new Point(midpoint.x - (cp2.y - cp1.y), midpoint.y - (cp1.x - cp2.x));
+                return new Line(lp1, lp2);
+            });
+        });
+
     }
 
 }
