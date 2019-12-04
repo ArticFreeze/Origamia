@@ -42,8 +42,8 @@ export class ThroughLine extends DependentLine {
 
     /**
      * Creates a line through two points.
-     * @param {*} p1 One point on the line
-     * @param {*} p2 Another point on the line
+     * @param {DependentPoint} p1 One point on the line
+     * @param {DependentPoint} p2 Another point on the line
      */
     constructor(p1, p2) {
         super();
@@ -83,7 +83,7 @@ export class BetweenLine extends DependentLine {
                 const midpoint = new Point((cp1.x + cp2.x) / 2, (cp1.y + cp2.y) / 2);
                 const lp1 = new Point(midpoint.x + (cp2.y - cp1.y), midpoint.y + (cp1.x - cp2.x));
                 const lp2 = new Point(midpoint.x - (cp2.y - cp1.y), midpoint.y - (cp1.x - cp2.x));
-                return new Line(lp1, lp2);
+                return [new Line(lp1, lp2)];
             });
         });
 

@@ -4,7 +4,7 @@ import './App.css';
 import Point from './models/Point';
 import Line from './models/Line';
 import GameState from './models/GameState';
-import { BasePoint, IntersectPoint } from './models/DependentPoint';
+import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
 import { ThroughLine, BetweenLine } from './models/DependentLine';
 
 /**
@@ -21,7 +21,9 @@ class GameCanvas extends React.Component {
     var thrl1 = new ThroughLine(bp1, bp2);
     var btl1 = new BetweenLine(bp1, bp2);
     var intersect = new IntersectPoint(thrl1, btl1);
-    this.viewModel = new GameState([bp1, bp2, intersect], [thrl1, btl1]);
+    var bp3 = new BasePoint(new Point(150,40));
+    var fp = new FoldPoint(bp3,thrl1);
+    this.viewModel = new GameState([bp1, bp2, intersect, bp3, fp], [thrl1, btl1]);
     const tempState = this.viewModel.getPointsAndLines();
     this.state = {
         points: tempState.points,

@@ -36,6 +36,54 @@ export class BasePoint extends DependentPoint {
 }
 
 /**
+ * The FoldPoint class serves as a point that maps across a fold.
+ */
+export class FoldPoint extends DependentPoint {
+
+    /**
+     * Creates a FoldPoint
+     * @param {DependentPoint} p The point to map
+     * @param {DependentLine} l The fold line to map across
+     */
+    constructor(p, l) {
+        super();
+        this.p = p;
+        this.l = l;
+    }
+
+    getPoint = () => {
+        return this.p.getPoint().flatMap(cp => {
+            return this.l.getLine().flatMap(cl => {
+                // cp: the concrete point
+                // cl: the conrete line
+                if (cl.p1.y == cl.p2.y) { //horizontal fold
+                    const yHor = cp.y - ((cp.y - cl.p1.y) * 2);
+                    const xHor = cp.x;
+                    return [new Point(xHor, yHor)];
+                }
+
+                if (cl.p1.x == cl.p2.x) { //vertical fold
+                    const xVert = cp.x - ((cp.x - cl.p1.x) * 2);
+                    const yVert = cp.y;
+                    return [new Point(xVert, yVert)];
+                }
+
+                //following handles normal folds over a point left of the line over that line
+                const lineAB = new Line(cl.p1, cl.p2)
+                const tempP = new Point(cp.x + cl.p2.y - cl.p1.y, cp.y + cl.p1.x - cl.p2.x);
+                const lineCD = new Line(cp, tempP)
+                const halfwayPoint = intersect(lineAB, lineCD)
+                const foldedX = cp.x - 2 * (cp.x - halfwayPoint.x)
+                const foldedY = cp.y - 2 * (cp.y - halfwayPoint.y);
+                var foldPoint = new Point(foldedX, foldedY)
+
+                return [foldPoint]
+            });
+        });
+    }
+}
+
+/**
  * The IntersectPoint class serves as an intersection of two lines.
  */
 export class IntersectPoint extends DependentPoint {
@@ -54,7 +102,7 @@ export class IntersectPoint extends DependentPoint {
     getPoint = () => {
         return this.l1.getLine().flatMap(cl1 => {
             return this.l2.getLine().flatMap(cl2 => {
-                const ret = intersect(cl1,cl2);
+                const ret = intersect(cl1, cl2);
                 if (ret == null) {
                     return [];
                 } else {
