@@ -59,6 +59,13 @@ class GameCanvas extends React.Component {
         ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI, false);
         ctx.fill();
      })
+     ctx.strokeStyle= 'blue';
+     this.state.selectedLines.forEach(line => {
+     ctx.beginPath();
+     ctx.moveTo(line.p1.x, line.p1.y);
+     ctx.lineTo(line.p2.x, line.p2.y);
+     ctx.stroke();
+     })
     }
   }
 
@@ -67,11 +74,20 @@ class GameCanvas extends React.Component {
         console.log(clickPoint);
         var closePoints = this.state.points.filter(p => p.distance(clickPoint) < 20);
         closePoints.sort((p1,p2) => p1.distance(clickPoint) - p2.distance(clickPoint));
+
+        var closeLines = this.state.lines.filter(l => l.distance(clickPoint) < 20);
+        //SORT closeLines hERE
+        console.log(closeLines);
         if (closePoints.length > 0) {
             var sPoints = this.state.selectedPoints;
             sPoints.push(closePoints[0]);
             this.setState({selectedPoints: sPoints});
-        } else {
+        } else if (closePoints.length == 0 && closeLines.length > 0) {
+            var sLines = this.state.selectedLines;
+            sLines.push(closeLines[0]);
+            this.setState({selectedLines: sLines});
+        }
+        else {//handles choosing between closeLines and closePoints
 
         }
     }

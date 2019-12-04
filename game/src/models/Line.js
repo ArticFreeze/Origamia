@@ -6,6 +6,17 @@ class Line {
         this.p1 = Point1;
         this.p2 = Point2;
     }
+
+    /**
+    * Returns the distance from this line to a point
+    * @param p {Point} The point to find the distance to
+    * @return {float} The distance between the point and this line
+    */
+    distance = (p) => {
+        var area = this.p1.x * this.p2.y + p.x * this.p1.y + this.p2.x * p.y
+            - p.x * this.p2.y - this.p2.x * this.p1.y - this.p1.x * p.y;
+        return (2 * Math.abs(area)) / Math.abs(this.p1.distance(this.p2));
+    }
 }
 /**
     * Given 2 lines, returns the intersection point of those lines, or null if there is
@@ -34,5 +45,7 @@ export const intersect = (l1, l2) => {
 
     return new Point(x, y);
 };
+
+
 
 export default Line;
