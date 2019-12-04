@@ -18,7 +18,7 @@ class GameState {
      * @returns an object with points, the points, and lines, the lines to draw
      */
     getPointsAndLines = () => {
-        return { points: this.depPoints.map(dp => dp.getPoint()).filter(p => p != null), lines: this.depLines.map(dl => dl.getLine()).filter(l => l != null) };
+        return { points: this.depPoints.flatMap(dp => dp.getPoint()), lines: this.depLines.flatMap(dl => dl.getLine()) };
     }
 
 }

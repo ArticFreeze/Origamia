@@ -9,7 +9,7 @@ class DependentPoint {
 
     /**
      * Resolves the DependentPoint to a point and returns it
-     * @returns {Point} A Point
+     * @returns {[Point]} All possible resolutions of the dependent points.
      */
     getPoint = () => {
         throw new Error("getPoint not implemented")
@@ -31,7 +31,7 @@ export class BasePoint extends DependentPoint {
         this.p = p;
     }
 
-    getPoint = () => this.p;
+    getPoint = () => [this.p];
 
 }
 
@@ -52,12 +52,16 @@ export class IntersectPoint extends DependentPoint {
     }
 
     getPoint = () => {
-        const cl1 = this.l1.getLine();
-        const cl2 = this.l2.getLine();
-        if (cl1 == null || cl2 == null) {
-            return null;
-        }
-        return intersect(cl1, cl2);
+        return this.l1.getLine().flatMap(cl1 => {
+            return this.l2.getLine().flatMap(cl2 => {
+                const ret = intersect(cl1,cl2);
+                if (ret == null) {
+                    return [];
+                } else {
+                    return [ret];
+                }
+            });
+        });
     }
 
 }

@@ -43,6 +43,7 @@ class GameCanvas extends React.Component {
       ctx.fillStyle = 'black';
       ctx.lineWidth = 1.5;
       this.state.lines.forEach(line => {
+        console.log(line);
         ctx.beginPath();
         ctx.moveTo(line.p1.x, line.p1.y);
         ctx.lineTo(line.p2.x, line.p2.y);
