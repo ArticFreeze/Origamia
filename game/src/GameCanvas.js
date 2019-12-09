@@ -6,7 +6,7 @@ import Line from './models/Line';
 import GameState from './models/GameState';
 import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
 import { ThroughLine, BetweenLine } from './models/DependentLine';
-
+import Tool, {IntersectTool, FoldTool, ThroughTool, BetweenTool} from './models/Tools';
 /**
  * The GameCanvas draws the points and lines and handles interactions to create new points and lines.
  */
@@ -21,8 +21,8 @@ class GameCanvas extends React.Component {
     var thrl1 = new ThroughLine(bp1, bp2);
     var btl1 = new BetweenLine(bp1, bp2);
     var intersect = new IntersectPoint(thrl1, btl1);
-    var bp3 = new BasePoint(new Point(150,40));
-    var fp = new FoldPoint(bp3,thrl1);
+    var bp3 = new BasePoint(new Point(150, 40));
+    var fp = new FoldPoint(bp3, thrl1);
     this.viewModel = new GameState([bp1, bp2, intersect, bp3, fp], [thrl1, btl1]);
     const tempState = this.viewModel.getPointsAndLines();
     this.state = {
@@ -30,7 +30,7 @@ class GameCanvas extends React.Component {
       lines: tempState.lines,
       selectedPoints: [],
       selectedLines: [],
-      selectedTool: 0
+      selectedTool: new IntersectTool(this.viewModel)
     };
   }
 
@@ -78,11 +78,11 @@ class GameCanvas extends React.Component {
     closePoints.sort((p1, p2) => p1.distance(clickPoint) - p2.distance(clickPoint));
 
     var closeLines = this.state.lines.filter(l => l.distance(clickPoint) < 20);
-    closeLines.sort((l1,l2) => l1.distance(clickPoint) - l2.distance(clickPoint));
+    closeLines.sort((l1, l2) => l1.distance(clickPoint) - l2.distance(clickPoint));
     if (closePoints.length > 0) {
       var sPoints = this.state.selectedPoints;
       if (sPoints.includes(closePoints[0])) {
-        sPoints.splice(sPoints.indexOf(closePoints[0]),1);
+        sPoints.splice(sPoints.indexOf(closePoints[0]), 1);
       } else {
         sPoints.push(closePoints[0]);
       }
@@ -90,12 +90,33 @@ class GameCanvas extends React.Component {
     } else if (closeLines.length > 0) {
       var sLines = this.state.selectedLines;
       if (sLines.includes(closeLines[0])) {
-        sLines.splice(sLines.indexOf(closeLines[0]),1);
+        sLines.splice(sLines.indexOf(closeLines[0]), 1);
       } else {
         sLines.push(closeLines[0]);
       }
       this.setState({ selectedLines: sLines });
     }
+    this.checkTool();
+  }
+
+  checkTool = () => {
+    const temp = this.state.selectedTool.doAction(this.state.selectedPoints,this.state.selectedLines);
+    if (temp.newPoints.length > 0 || temp.newLines.length > 0) {
+      temp.newPoints.forEach(newPoint => {
+        this.viewModel.depPoints.push(newPoint);
+      });
+      temp.newLines.forEach(newLine => {
+        this.viewModel.depLines.push(newLine);
+      });
+      const temp2 = this.viewModel.getPointsAndLines();
+      this.setState({points: temp2.points, lines: temp2.lines, selectedPoints: [], selectedLines: []});
+    }
+  }
+
+  toolSelected = (tool) => (e) => {
+    console.log(typeof(tool));
+    this.setState({selectedTool: tool});
+    this.checkTool();
   }
 
   render() {
@@ -103,9 +124,10 @@ class GameCanvas extends React.Component {
       <div>
         <canvas ref="canvas" width={640} height={600} onClick={this.userClicked} />
         <br />
-        <button name="intersectTool">Intersect</button>
-        <button name="throughTool">Fold through</button>
-        <button name="betweenTool">Fold Between</button>
+        <button name="intersectTool" onClick={this.toolSelected(new IntersectTool(this.viewModel))}>Intersect</button>
+        <button name="foldTool" onClick={this.toolSelected(new FoldTool(this.viewModel))}>Fold Point</button>
+        <button name="throughTool" onClick={this.toolSelected(new ThroughTool(this.viewModel))}>Fold through</button>
+        <button name="betweenTool" onClick={this.toolSelected(new BetweenTool(this.viewModel))}>Fold Between</button>
       </div>
     )
   }

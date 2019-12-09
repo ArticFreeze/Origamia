@@ -20,7 +20,7 @@ class GameState {
      */
     getDependentLine = (line) => {
         const candidates = this.depLines.filter(dl => {
-            return dl.getLine().includes(line);
+            return dl.getLine().filter(line2 => line.p1.x == line2.p1.x && line.p1.y == line2.p1.y && line.p2.x == line2.p2.x && line.p2.y == line2.p2.y).length > 0;
         });
         if (candidates.length == 0) {
             return null;
@@ -36,8 +36,10 @@ class GameState {
      */
     getDependentPoint = (point) => {
         const candidates = this.depPoints.filter(dp => {
-            return dp.getPoint().includes(point);
+            return dp.getPoint().filter(point2 => point.x == point2.x && point.y == point2.y).length > 0;
+
         });
+        console.log(candidates);
         if (candidates.length == 0) {
             return null;
         } else {

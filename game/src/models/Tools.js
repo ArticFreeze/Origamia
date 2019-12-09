@@ -33,7 +33,22 @@ class Tool {
 
 }
 
-class IntersectTool {
+export class FoldTool extends Tool {
+    constructor(gameState) {
+        super(gameState);
+    }
+
+    doAction = (selPoints,selLines) => {
+        if (selLines.length == 1 && selPoints.length == 1) {
+            const dp = this.gameState.getDependentPoint(selPoints[0]);
+            const dl = this.gameState.getDependentLine(selLines[0]);
+            return {newPoints: [new FoldPoint(dp,dl)], newLines: []};
+        }
+        return {newPoints: [], newLines: []};
+    }
+}
+
+export class IntersectTool extends Tool {
 
     constructor(gameState) {
         super(gameState);
@@ -41,13 +56,45 @@ class IntersectTool {
 
     doAction = (selPoints,selLines) => {
         if (selLines.length == 2 && selPoints.length == 0) {
-            const dl1 = super.gameState.getDependentLine(selLines[0]);
-            const dl2 = super.gameState.getDependentLine(selLines[1]);
-            return new IntersectPoint(dl1,dl2);
+            const dl1 = this.gameState.getDependentLine(selLines[0]);
+            const dl2 = this.gameState.getDependentLine(selLines[1]);
+            return {newPoints: [new IntersectPoint(dl1,dl2)], newLines: []};
         }
         return {newPoints: [], newLines: []};
     }
 
 }
+
+
+export class BetweenTool extends Tool {
+    constructor(gameState) {
+        super(gameState);
+    }
+
+    doAction = (selPoints,selLines) => {
+        if (selLines.length == 0 && selPoints.length == 2) {
+            const dp1 = this.gameState.getDependentPoint(selPoints[0]);
+            const dp2 = this.gameState.getDependentPoint(selPoints[1]);
+            return {newPoints:[], newLines:[new BetweenLine(dp1,dp2)]};
+        }
+        return {newPoints: [], newLines: []};
+    }
+}
+
+export class ThroughTool extends Tool {
+    constructor(gameState) {
+        super(gameState);
+    }
+
+    doAction = (selPoints,selLines) => {
+        if (selLines.length == 0 && selPoints.length == 2) {
+            const dp1 = this.gameState.getDependentPoint(selPoints[0]);
+            const dp2 = this.gameState.getDependentPoint(selPoints[1]);
+            return {newPoints: [], newLines:[new ThroughLine(dp1,dp2)]};
+        }
+        return {newPoints: [], newLines: []};
+    }
+}
+
 
 export default Tool;
