@@ -22,4 +22,5 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('game/', views.game_view)
+    path('templevel/', views.temp_level)
 ]
