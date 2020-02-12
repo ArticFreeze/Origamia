@@ -9,5 +9,5 @@ def game_view(request):
     return render(request, 'Game/index.html')
 
 
-def temp_level(reqiest):
-    
+def temp_level(request):
+    return render(request, 'Game/index.html')

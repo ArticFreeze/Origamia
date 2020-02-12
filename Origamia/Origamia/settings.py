@@ -126,6 +126,6 @@ STATIC_URL = '/static/'
 # TODO: Setup privileges once accounts are active (change to .isAuthenticated)
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny;,
+        'rest_framework.permissions.AllowAny'
     ]
 }
