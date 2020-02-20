@@ -36,9 +36,28 @@ class GameCanvas extends React.Component {
 
   async componentDidMount() {
 
-    const res = await fetch('http:127.0.0.1:8000/templevel');
-    console.log(res);
+    const res = await fetch('http://127.0.0.1:8000/templevel');
+    //console.log(res);
     const level = await res.json()
+
+    fetch('http://127.0.0.1:8000/templevel', {
+      method: "get",
+      //credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify()
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log(data);
+    }).catch(function (e) {
+      console.log("failed to parse", e);
+    });
+
+    //const level = await data.json();
+    //console.log("hiiiiiiiiiiiiii", res)
 
     this.setState({
       points: level.points,
