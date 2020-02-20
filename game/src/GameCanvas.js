@@ -6,7 +6,7 @@ import Line from './models/Line';
 import GameState from './models/GameState';
 import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
 import { ThroughLine, BetweenLine } from './models/DependentLine';
-import Tool, {IntersectTool, FoldTool, ThroughTool, BetweenTool} from './models/Tools';
+import Tool, { IntersectTool, FoldTool, ThroughTool, BetweenTool } from './models/Tools';
 /**
  * The GameCanvas draws the points and lines and handles interactions to create new points and lines.
  */
@@ -34,7 +34,17 @@ class GameCanvas extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const res = await fetch('http:127.0.0.1:8000/templevel');
+    console.log(res);
+    const level = await res.json()
+
+    this.setState({
+      points: level.points,
+      lines: level.lines
+    })
+
     this.componentDidUpdate();
   }
 
@@ -100,7 +110,7 @@ class GameCanvas extends React.Component {
   }
 
   checkTool = () => {
-    const temp = this.state.selectedTool.doAction(this.state.selectedPoints,this.state.selectedLines);
+    const temp = this.state.selectedTool.doAction(this.state.selectedPoints, this.state.selectedLines);
     if (temp.newPoints.length > 0 || temp.newLines.length > 0) {
       temp.newPoints.forEach(newPoint => {
         this.viewModel.depPoints.push(newPoint);
@@ -109,13 +119,13 @@ class GameCanvas extends React.Component {
         this.viewModel.depLines.push(newLine);
       });
       const temp2 = this.viewModel.getPointsAndLines();
-      this.setState({points: temp2.points, lines: temp2.lines, selectedPoints: [], selectedLines: []});
+      this.setState({ points: temp2.points, lines: temp2.lines, selectedPoints: [], selectedLines: [] });
     }
   }
 
   toolSelected = (tool) => (e) => {
-    console.log(typeof(tool));
-    this.setState({selectedTool: tool});
+    console.log(typeof (tool));
+    this.setState({ selectedTool: tool });
     this.checkTool();
   }
 
