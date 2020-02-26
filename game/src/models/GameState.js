@@ -52,6 +52,8 @@ class GameState {
      * @returns an object with points, the points, and lines, the lines to draw
      */
     getPointsAndLines = () => {
+        console.log(this.depPoints);
+        console.log(this.depLines);
         return { points: this.depPoints.flatMap(dp => dp.getPoint()), lines: this.depLines.flatMap(dl => dl.getLine()) };
     }
 

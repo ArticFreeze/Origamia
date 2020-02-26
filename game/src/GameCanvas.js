@@ -5,7 +5,7 @@ import Point from './models/Point';
 import Line from './models/Line';
 import GameState from './models/GameState';
 import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
-import { ThroughLine, BetweenLine } from './models/DependentLine';
+import DependentLine, { BaseLine, ThroughLine, BetweenLine } from './models/DependentLine';
 import Tool, { IntersectTool, FoldTool, ThroughTool, BetweenTool } from './models/Tools';
 /**
  * The GameCanvas draws the points and lines and handles interactions to create new points and lines.
@@ -16,22 +16,14 @@ class GameCanvas extends React.Component {
 
   constructor(props) {
     super(props);
-    var bp1 = new BasePoint(new Point(300, 100));
-    var bp2 = new BasePoint(new Point(100, 300));
-    var thrl1 = new ThroughLine(bp1, bp2);
-    var btl1 = new BetweenLine(bp1, bp2);
-    var intersect = new IntersectPoint(thrl1, btl1);
-    var bp3 = new BasePoint(new Point(150, 40));
-    var fp = new FoldPoint(bp3, thrl1);
-    this.viewModel = new GameState([bp1, bp2, intersect, bp3, fp], [thrl1, btl1]);
-    const tempState = this.viewModel.getPointsAndLines();
     this.state = {
-      points: tempState.points,
-      lines: tempState.lines,
+      points: [],
+      lines: [],
       selectedPoints: [],
       selectedLines: [],
       selectedTool: new IntersectTool(this.viewModel)
     };
+    this.viewModel = new GameState([], []);
   }
 
   async componentDidMount() {
@@ -39,6 +31,8 @@ class GameCanvas extends React.Component {
     const res = await fetch('http://127.0.0.1:8000/templevel');
     //console.log(res);
     const level = await res.json()
+
+
     let jsondata;
     fetch('http://127.0.0.1:8000/templevel', {
       method: "get",
@@ -58,13 +52,14 @@ class GameCanvas extends React.Component {
     });
 
     //const level = await data.json();
-    console.log(jsondata);
+
 
     this.setState({
-      points: level.points,
-      lines: level.lines
+      points: level.points.map(point => new Point(point.x, point.y)),
+      lines: level.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)))
     })
-
+    this.viewModel.depPoints = this.state.points.map(point => new BasePoint(point));
+    this.viewModel.depLines = this.state.lines.map(line => new BaseLine(line));
     this.componentDidUpdate();
   }
 
