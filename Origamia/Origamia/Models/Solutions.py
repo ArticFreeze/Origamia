@@ -12,7 +12,8 @@ class Solution:
         self.expectedPoints = expectedPoints
         self.expectedLines = expectedLines
 
-
-def to_dict(self):
-    'expectedPoints' = self.expectedPoints
-    'expectedLines' = self.expectedLines
+    def to_dict(self):
+        return {
+            'expectedPoints': list(map(lambda p: p.to_dict(),  self.expectedPoints)),
+            'expectedLines': list(map(lambda l: l.to_dict(), self.expectedLines))
+        }

@@ -46,6 +46,6 @@ class Level:
             'points': list(map(lambda x: x.to_dict(), self.points)),
             'lines': list(map(lambda x: x.to_dict(), self.lines)),
             'steps': self.steps,
-            'solutions': self.solutions,
+            'solutions': list(map(lambda s: s.to_dict(), self.solutions)),
             'hints': self.hints
         }
