@@ -58,8 +58,10 @@ class GameCanvas extends React.Component {
       points: level.points.map(point => new Point(point.x, point.y)),
       lines: level.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)))
     })
-    this.viewModel.depPoints = this.state.points.map(point => new BasePoint(point));
-    this.viewModel.depLines = this.state.lines.map(line => new BaseLine(line));
+    var pointID = 0;
+    var lineID = 0;
+    this.viewModel.depPoints = this.state.points.map(point => new BasePoint(point, pointID++));
+    this.viewModel.depLines = this.state.lines.map(line => new BaseLine(line, lineID++));
     this.componentDidUpdate();
   }
 

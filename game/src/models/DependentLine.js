@@ -1,11 +1,15 @@
 import Point from './Point';
 import Line from './Line';
 import DependentPoint, { BasePoint, IntersectPoint } from './DependentPoint';
-
+import DependentObject from './DependentObject';
 /**
  * The DependentLine represents a line that is dependent on other points or lines.
  */
-class DependentLine {
+class DependentLine extends DependentObject {
+
+    constructor() {
+        super();
+    }
 
     /**
      * Gets a concrete line for drawing
@@ -18,20 +22,30 @@ class DependentLine {
 }
 
 /**
- * The BaseLine class is a dependent line that is dependent on a supplied base line.
+ * The BaseLine class serves as a concrete line with concrete coordinates.
  */
 export class BaseLine extends DependentLine {
 
     /**
-     * Creates a BaseLine class
-     * @param {Line} l The line to represent
+     * Creates a BaseLine from a specified point
+     * @param {Point} l The line to store
      */
-    constructor(l) {
+    constructor(l, id) {
         super();
         this.l = l;
+        this.id = id;
     }
 
-    getLine = () => [this.l];
+
+    moveBaseLine = (line, id) => {
+        if (this.id == id) {
+            this.l = line;
+        }
+    }
+
+    moveBasePoint = (point, id) => {
+        // Do not crash
+    }
 
 }
 
@@ -57,6 +71,16 @@ export class ThroughLine extends DependentLine {
                 return [new Line(p01, p02)];
             });
         })
+    }
+
+    moveBasePoint = (point, id) => {
+        this.p1.moveBasePoint(point, id);
+        this.p2.moveBasePoint(point, id);
+    }
+
+    moveBaseLine = (line, id) => {
+        this.p1.moveBaseLine(line, id);
+        this.p2.moveBaseLine(line, id);
     }
 
 }
@@ -89,6 +113,15 @@ export class BetweenLine extends DependentLine {
 
     }
 
+    moveBasePoint = (point, id) => {
+        this.p1.moveBasePoint(point, id);
+        this.p2.moveBasePoint(point, id);
+    }
+
+    moveBaseLine = (line, id) => {
+        this.p1.moveBaseLine(line, id);
+        this.p2.moveBaseLine(line, id);
+    }
 }
 
 export default DependentLine;

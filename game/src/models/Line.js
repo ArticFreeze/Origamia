@@ -46,6 +46,17 @@ export const intersect = (l1, l2) => {
     return new Point(x, y);
 };
 
+/**
+ * Returns slope of a given line.
+ * @param {l} line that slope is being returned for.
+ */
+export const slope = (l) => {
+    if (l.p1.x == l.p2.x) {
+        return Number.NEGATIVE_INFINITY;
+    }
+    return (l.p2.y - l.p1.y) / (l.p2.x - l.p1.x);
+}
+
 
 
 export default Line;

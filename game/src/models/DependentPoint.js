@@ -1,11 +1,17 @@
 import Point from './Point';
 import Line, { intersect } from './Line';
 import DependentLine, { ThroughLine } from './DependentLine';
+import DependentObject from './DependentObject';
+
 
 /**
  * The DependentPoint specifies a point that is dependent on a number of factors.  Dependent points are constructed as either base points or intersections of lines.
  */
-class DependentPoint {
+class DependentPoint extends DependentObject {
+
+    constructor() {
+        super();
+    }
 
     /**
      * Resolves the DependentPoint to a point and returns it
@@ -14,6 +20,8 @@ class DependentPoint {
     getPoint = () => {
         throw new Error("getPoint not implemented")
     }
+
+
 
 }
 
@@ -26,9 +34,21 @@ export class BasePoint extends DependentPoint {
      * Creates a BasePoint from a specified point
      * @param {Point} p The point to store
      */
-    constructor(p) {
+    constructor(p, id) {
         super();
         this.p = p;
+        this.id = id;
+    }
+
+
+    moveBasePoint = (point, id) => {
+        if (this.id == id) {
+            this.p = point;
+        }
+    }
+
+    moveBaseLine = (line, id) => {
+        // Do not crash
     }
 
     getPoint = () => [this.p];
@@ -81,6 +101,17 @@ export class FoldPoint extends DependentPoint {
             });
         });
     }
+
+    moveBasePoint = (point, id) => {
+        this.p.moveBasePoint(point, id);
+        this.l.moveBasePoint(point, id);
+    }
+
+    moveBaseLine = (line, id) => {
+        this.p.moveBaseLine(line, id);
+        this.l.moveBaseLine(line, id);
+    }
+
 }
 
 /**
@@ -112,6 +143,15 @@ export class IntersectPoint extends DependentPoint {
         });
     }
 
+    moveBasePoint = (point, id) => {
+        this.l1.moveBasePoint(point, id);
+        this.l2.moveBasePoint(point, id);
+    }
+
+    moveBaseLine = (line, id) => {
+        this.l1.moveBaseLine(line, id);
+        this.l2.moveBaseLine(line, id);
+    }
 }
 
 export default DependentPoint;
