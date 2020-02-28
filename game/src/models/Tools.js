@@ -2,6 +2,7 @@ import Point from './Point';
 import Line, { slope, intersect } from './Line';
 import DependentPoint, { BasePoint, IntersectPoint, FoldPoint } from './DependentPoint';
 import DependentLine, { BaseLine, ThroughLine, BetweenLine } from './DependentLine';
+import DependentObject from './DependentObject';
 import GameState from './GameState';
 /**
  * The Tool class represents a tool for creating new points and lines.
@@ -96,6 +97,8 @@ export class ThroughTool extends Tool {
     }
 }
 
+const eps = .01;
+
 export class SelectSolutionTool extends Tool {
     constructor(gameState, solutions) {
         super(gameState);
@@ -103,33 +106,37 @@ export class SelectSolutionTool extends Tool {
     }
 
     doAction = (selPoints, selLines) => {
+        const dSelPoints = selPoints.map(selPoint => this.gameState.getDependentPoint(selPoint));
+        const dSelLines = selLines.map(selLine => this.gameState.getDependentLine(selLine));
         var failed = false;
         this.solutions.forEach(solution => {
-            var passed = false;
+            var currentCasePassed = false;
             var id = 0;
             // Move base points and lines
             solution.basePoints.forEach(point => {
-                selPoints.forEach(selPoint => {
-                    selPoint.moveBasePoint(new Point(point.x, point.y), id);
+                dSelPoints.forEach(selPoint => {
+                    if (selPoint != null)
+                        selPoint.moveBasePoint(new Point(point.x, point.y), id);
                 });
-                selLines.forEach(selLine => {
-                    selLine.moveBasePoint(new Point(point.x, point.y), id);
+                dSelLines.forEach(selLine => {
+                    if (selLine != null)
+                        selLine.moveBasePoint(new Point(point.x, point.y), id);
                 })
                 id++;
             });
             id = 0;
             solution.baseLines.forEach(line => {
-                selPoints.forEach(selPoint => {
+                dSelPoints.forEach(selPoint => {
                     selPoint.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
                 });
-                selLines.forEach(selLine => {
+                dSelLines.forEach(selLine => {
                     selLine.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
                 })
                 id++;
             })
             // Sort selected points and lines
-            selPoints.sort((p1, p2) => p1.x - p2.x || p1.y - p2.y);
-            selLines.sort((l1, l2) => {
+            dSelPoints.sort((p1, p2) => p1.x - p2.x || p1.y - p2.y);
+            dSelLines.sort((l1, l2) => {
                 const s1 = slope(l1); //slope1
                 const s2 = slope(l2); //slope2
                 if (s1 == s2) { //dealing with two parallel lines, has several cases
@@ -140,21 +147,45 @@ export class SelectSolutionTool extends Tool {
                 }
                 else return s2 - s1; //differing slopes
             });
-
+            const nSelPoints = dSelPoints.map(dPoint => dPoint.getPoint()[0]);
+            const nSelLines = dSelLines.map(dLine => dLine.getLine()[0]);
 
             // Iterate over solutions to see if there is a match
             solution.solutions.forEach(option => {
+                var currentOptionPassed = true;
+                if (nSelPoints.length != option.expectedPoints.length) {
+                    currentOptionPassed = false;
+                } else {
+                    for (var i = 0; i < option.expectedPoints.length; i++) {
+                        if (nSelPoints[i].distance(option.expectedPoints[i]) > eps)
+                            currentOptionPassed = false;
+                    }
+                }
+                if (nSelLines.length != option.expectedLines.length) {
+                    currentOptionPassed = false;
+                } else {
+                    for (var i = 0; i < option.expectedLines.length; i++) {
+                        if (nSelLines[i].distance(option.expectedLines[i].p1) > eps)
+                            currentOptionPassed = false;
+                        if (nSelLines[i].distance(option.expectedLines[i].p2) > eps)
+                            currentOptionPassed = false;
+                    }
+                }
 
+                if (currentOptionPassed)
+                    currentCasePassed = true;
             });
 
-            if (!passed) {
+            if (!currentCasePassed) {
                 failed = true;
             }
         });
 
         if (!failed) {
-            // TODO: Send win
+            alert("Congratulations! You've won!");
         }
+
+        return { newPoints: [], newLines: [] };
     }
 
 }

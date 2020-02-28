@@ -6,7 +6,7 @@ import Line from './models/Line';
 import GameState from './models/GameState';
 import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
 import DependentLine, { BaseLine, ThroughLine, BetweenLine } from './models/DependentLine';
-import Tool, { IntersectTool, FoldTool, ThroughTool, BetweenTool } from './models/Tools';
+import Tool, { IntersectTool, FoldTool, ThroughTool, BetweenTool, SelectSolutionTool } from './models/Tools';
 /**
  * The GameCanvas draws the points and lines and handles interactions to create new points and lines.
  */
@@ -51,12 +51,13 @@ class GameCanvas extends React.Component {
       console.log("failed to parse", e);
     });
 
-    //const level = await data.json();
+
 
 
     this.setState({
       points: level.points.map(point => new Point(point.x, point.y)),
-      lines: level.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)))
+      lines: level.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y))),
+      solutions: level.solutions
     })
     var pointID = 0;
     var lineID = 0;
@@ -155,6 +156,7 @@ class GameCanvas extends React.Component {
         <button name="foldTool" onClick={this.toolSelected(new FoldTool(this.viewModel))}>Fold Point</button>
         <button name="throughTool" onClick={this.toolSelected(new ThroughTool(this.viewModel))}>Fold through</button>
         <button name="betweenTool" onClick={this.toolSelected(new BetweenTool(this.viewModel))}>Fold Between</button>
+        <button name="SolutionCheck" onClick={this.toolSelected(new SelectSolutionTool(this.viewModel, this.state.solutions))}>Check Solution</button>
       </div>
     )
   }
