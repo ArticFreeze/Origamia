@@ -43,12 +43,16 @@ export class BasePoint extends DependentPoint {
 
     moveBasePoint = (point, id) => {
         if (this.id == id) {
+            const ret = this.p;
             this.p = point;
+            return ret;
         }
+        return null;
     }
 
     moveBaseLine = (line, id) => {
         // Do not crash
+        return null;
     }
 
     getPoint = () => [this.p];
@@ -103,13 +107,15 @@ export class FoldPoint extends DependentPoint {
     }
 
     moveBasePoint = (point, id) => {
-        this.p.moveBasePoint(point, id);
-        this.l.moveBasePoint(point, id);
+        const ret1 = this.p.moveBasePoint(point, id);
+        const ret2 = this.l.moveBasePoint(point, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
     moveBaseLine = (line, id) => {
-        this.p.moveBaseLine(line, id);
-        this.l.moveBaseLine(line, id);
+        const ret1 = this.p.moveBaseLine(line, id);
+        const ret2 = this.l.moveBaseLine(line, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
 }
@@ -144,13 +150,15 @@ export class IntersectPoint extends DependentPoint {
     }
 
     moveBasePoint = (point, id) => {
-        this.l1.moveBasePoint(point, id);
-        this.l2.moveBasePoint(point, id);
+        const ret1 = this.l1.moveBasePoint(point, id);
+        const ret2 = this.l2.moveBasePoint(point, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
     moveBaseLine = (line, id) => {
-        this.l1.moveBaseLine(line, id);
-        this.l2.moveBaseLine(line, id);
+        const ret1 = this.l1.moveBaseLine(line, id);
+        const ret2 = this.l2.moveBaseLine(line, id);
+        return ret1 != null ? ret1 : ret2;
     }
 }
 

@@ -39,12 +39,16 @@ export class BaseLine extends DependentLine {
 
     moveBaseLine = (line, id) => {
         if (this.id == id) {
+            const ret = this.l;
             this.l = line;
+            return ret;
         }
+        return null;
     }
 
     moveBasePoint = (point, id) => {
         // Do not crash
+        return null;
     }
 
 }
@@ -74,13 +78,15 @@ export class ThroughLine extends DependentLine {
     }
 
     moveBasePoint = (point, id) => {
-        this.p1.moveBasePoint(point, id);
-        this.p2.moveBasePoint(point, id);
+        const ret1 = this.p1.moveBasePoint(point, id);
+        const ret2 = this.p2.moveBasePoint(point, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
     moveBaseLine = (line, id) => {
-        this.p1.moveBaseLine(line, id);
-        this.p2.moveBaseLine(line, id);
+        const ret1 = this.p1.moveBaseLine(line, id);
+        const ret2 = this.p2.moveBaseLine(line, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
 }
@@ -114,13 +120,15 @@ export class BetweenLine extends DependentLine {
     }
 
     moveBasePoint = (point, id) => {
-        this.p1.moveBasePoint(point, id);
-        this.p2.moveBasePoint(point, id);
+        const ret1 = this.p1.moveBasePoint(point, id);
+        const ret2 = this.p2.moveBasePoint(point, id);
+        return ret1 != null ? ret1 : ret2;
     }
 
     moveBaseLine = (line, id) => {
-        this.p1.moveBaseLine(line, id);
-        this.p2.moveBaseLine(line, id);
+        const ret1 = this.p1.moveBaseLine(line, id);
+        const ret2 = this.p2.moveBaseLine(line, id);
+        return ret1 != null ? ret1 : ret2;
     }
 }
 
