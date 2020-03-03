@@ -4,9 +4,9 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.response import Response
 
-from Models.Levels import level
-from Models.Solutions import Solution
-from Models.SolutionCheck import SolutionCheck
+from .Models.Levels import level
+from .Models.Solutions import Solution
+from .Models.SolutionCheck import SolutionCheck
 
 templevel = level.Level("Midpoint", "Construct the midpoint between two points.", [level.Point(50, 50), level.Point(
     350, 350)], [], 3, [SolutionCheck(
