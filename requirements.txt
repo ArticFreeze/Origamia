@@ -1,3 +1,6 @@
 django>=2.2.6
 djangorestframework
 django-cors-headers >= 3.1.1
+
+Installs for machines running backend/frontend:
+pip install django-cors-headers
