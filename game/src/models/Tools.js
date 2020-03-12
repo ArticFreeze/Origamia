@@ -108,109 +108,109 @@ const eps = .01;
  */
 export const checkSolution = (dSelPoints, dSelLines, solutions) => {
     var failed = false;
-        solutions.forEach(solution => {
-            var currentCasePassed = false;
-            var id = 0;
-            // Move base points and lines
-            const originalPoints = solution.basePoints.map(point => {
-                var ret = null;
-                dSelPoints.forEach(selPoint => {
-                    if (selPoint != null)
-                        ret = ret != null ? ret : selPoint.moveBasePoint(new Point(point.x, point.y), id);
-                });
-                dSelLines.forEach(selLine => {
-                    if (selLine != null)
-                        ret = ret != null ? ret : selLine.moveBasePoint(new Point(point.x, point.y), id);
-                })
-                id++;
-                return ret;
+    solutions.forEach(solution => {
+        var currentCasePassed = false;
+        var id = 0;
+        // Move base points and lines
+        const originalPoints = solution.basePoints.map(point => {
+            var ret = null;
+            dSelPoints.forEach(selPoint => {
+                if (selPoint != null)
+                    ret = ret != null ? ret : selPoint.moveBasePoint(new Point(point.x, point.y), id);
             });
-            id = 0;
-            const originalLines = solution.baseLines.map(line => {
-                var ret = null;
-                dSelPoints.forEach(selPoint => {
-                    ret = ret != null ? ret : selPoint.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
-                });
-                dSelLines.forEach(selLine => {
-                    ret = ret != null ? ret : selLine.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
-                })
-                id++;
-                return ret;
+            dSelLines.forEach(selLine => {
+                if (selLine != null)
+                    ret = ret != null ? ret : selLine.moveBasePoint(new Point(point.x, point.y), id);
             })
-            // Sort selected points and lines
-            dSelPoints.sort((p1, p2) => p1.x - p2.x || p1.y - p2.y);
-            dSelLines.sort((l1, l2) => {
-                const s1 = slope(l1); //slope1
-                const s2 = slope(l2); //slope2
-                if (s1 == s2) { //dealing with two parallel lines, has several cases
-                    if (s1 == Number.NEGATIVE_INFINITY) { //two parallel vertical lines
-                        return l2.p1.x - l1.p1.x;
-                    }
-                    return intersect(l2, new Line(new Point(0, 0), new Point(0, 1))).y - intersect(l1, new Line(new Point(0, 0), new Point(0, 1))).y; //two parallel lines
-                }
-                else return s2 - s1; //differing slopes
-            });
-            const nSelPoints = dSelPoints.map(dPoint => dPoint.getPoint()[0]);
-            const nSelLines = dSelLines.map(dLine => dLine.getLine()[0]);
-
-            // Iterate over solutions to see if there is a match
-            solution.solutions.forEach(option => {
-                var currentOptionPassed = true;
-                if (nSelPoints.length != option.expectedPoints.length) {
-                    currentOptionPassed = false;
-                } else {
-                    for (var i = 0; i < option.expectedPoints.length; i++) {
-                        console.log(nSelPoints[i]);
-                        if (nSelPoints[i].distance(option.expectedPoints[i]) > eps)
-                            currentOptionPassed = false;
-                    }
-                }
-                if (nSelLines.length != option.expectedLines.length) {
-                    currentOptionPassed = false;
-                } else {
-                    for (var i = 0; i < option.expectedLines.length; i++) {
-                        if (nSelLines[i].distance(option.expectedLines[i].p1) > eps)
-                            currentOptionPassed = false;
-                        if (nSelLines[i].distance(option.expectedLines[i].p2) > eps)
-                            currentOptionPassed = false;
-                    }
-                }
-
-                if (currentOptionPassed)
-                    currentCasePassed = true;
-            });
-
-            if (!currentCasePassed) {
-                failed = true;
-            }
-            // Put the base points and lines back
-            id=0;
-            originalPoints.forEach(point => {
-                if (point != null) {
-                    dSelPoints.forEach(selPoint => {
-                        selPoint.moveBasePoint(point, id);
-                    });
-                    dSelLines.forEach(selLine => {
-                        selLine.moveBasePoint(point, id);
-                    });
-                }
-                id++;
-            });
-            id=0;
-            originalLines.forEach(line => {
-                if (line != null) {
-                    dSelPoints.forEach(selPoint => {
-                        selPoint.moveBaseLine(line,id);
-                    });
-                    dSelLines.forEach(selLine => {
-                        selLine.moveBaseLine(line,id);
-                    })
-                }
-                id++;
-            });
+            id++;
+            return ret;
         });
-        
-        return !failed;
+        id = 0;
+        const originalLines = solution.baseLines.map(line => {
+            var ret = null;
+            dSelPoints.forEach(selPoint => {
+                ret = ret != null ? ret : selPoint.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
+            });
+            dSelLines.forEach(selLine => {
+                ret = ret != null ? ret : selLine.moveBaseLine(new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y)));
+            })
+            id++;
+            return ret;
+        })
+        // Sort selected points and lines
+        dSelPoints.sort((p1, p2) => p1.x - p2.x || p1.y - p2.y);
+        dSelLines.sort((l1, l2) => {
+            const s1 = slope(l1); //slope1
+            const s2 = slope(l2); //slope2
+            if (s1 == s2) { //dealing with two parallel lines, has several cases
+                if (s1 == Number.NEGATIVE_INFINITY) { //two parallel vertical lines
+                    return l2.p1.x - l1.p1.x;
+                }
+                return intersect(l2, new Line(new Point(0, 0), new Point(0, 1))).y - intersect(l1, new Line(new Point(0, 0), new Point(0, 1))).y; //two parallel lines
+            }
+            else return s2 - s1; //differing slopes
+        });
+        const nSelPoints = dSelPoints.map(dPoint => dPoint.getPoint()[0]);
+        const nSelLines = dSelLines.map(dLine => dLine.getLine()[0]);
+
+        // Iterate over solutions to see if there is a match
+        solution.solutions.forEach(option => {
+            var currentOptionPassed = true;
+            if (nSelPoints.length != option.expectedPoints.length) {
+                currentOptionPassed = false;
+            } else {
+                for (var i = 0; i < option.expectedPoints.length; i++) {
+                    console.log(nSelPoints[i]);
+                    if (nSelPoints[i].distance(option.expectedPoints[i]) > eps)
+                        currentOptionPassed = false;
+                }
+            }
+            if (nSelLines.length != option.expectedLines.length) {
+                currentOptionPassed = false;
+            } else {
+                for (var i = 0; i < option.expectedLines.length; i++) {
+                    if (nSelLines[i].distance(option.expectedLines[i].p1) > eps)
+                        currentOptionPassed = false;
+                    if (nSelLines[i].distance(option.expectedLines[i].p2) > eps)
+                        currentOptionPassed = false;
+                }
+            }
+
+            if (currentOptionPassed)
+                currentCasePassed = true;
+        });
+
+        if (!currentCasePassed) {
+            failed = true;
+        }
+        // Put the base points and lines back
+        id = 0;
+        originalPoints.forEach(point => {
+            if (point != null) {
+                dSelPoints.forEach(selPoint => {
+                    selPoint.moveBasePoint(point, id);
+                });
+                dSelLines.forEach(selLine => {
+                    selLine.moveBasePoint(point, id);
+                });
+            }
+            id++;
+        });
+        id = 0;
+        originalLines.forEach(line => {
+            if (line != null) {
+                dSelPoints.forEach(selPoint => {
+                    selPoint.moveBaseLine(line, id);
+                });
+                dSelLines.forEach(selLine => {
+                    selLine.moveBaseLine(line, id);
+                })
+            }
+            id++;
+        });
+    });
+
+    return !failed;
 }
 
 export class SelectSolutionTool extends Tool {
@@ -222,7 +222,7 @@ export class SelectSolutionTool extends Tool {
     doAction = (selPoints, selLines) => {
         const dSelPoints = selPoints.map(selPoint => this.gameState.getDependentPoint(selPoint));
         const dSelLines = selLines.map(selLine => this.gameState.getDependentLine(selLine));
-        
+
 
         if (checkSolution(dSelPoints, dSelLines, this.solutions)) {
             alert("Congratulations! You've won!");

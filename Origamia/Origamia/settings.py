@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'levels',
 
 ]
 
@@ -78,6 +79,9 @@ WSGI_APPLICATION = 'Origamia.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Admin:
+# username: admin
+# password: commonpassword
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

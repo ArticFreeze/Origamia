@@ -28,13 +28,13 @@ class GameCanvas extends React.Component {
 
   async componentDidMount() {
 
-    const res = await fetch('http://127.0.0.1:8000/templevel');
+    const res = await fetch('http://127.0.0.1:8000/levels/templevel');
     //console.log(res);
     const level = await res.json()
 
 
     let jsondata;
-    fetch('http://127.0.0.1:8000/templevel', {
+    fetch('http://127.0.0.1:8000/levels/templevel', {
       method: "get",
       //credentials: "same-origin",
       headers: {
@@ -51,13 +51,13 @@ class GameCanvas extends React.Component {
       console.log("failed to parse", e);
     });
 
-
+    const levelData = JSON.parse(level.levelData)
 
 
     this.setState({
-      points: level.points.map(point => new Point(point.x, point.y)),
-      lines: level.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y))),
-      solutions: level.solutions
+      points: levelData.points.map(point => new Point(point.x, point.y)),
+      lines: levelData.lines.map(line => new Line(new Point(line.p1.x, line.p1.y), new Point(line.p2.x, line.p2.y))),
+      solutions: JSON.parse(level.clientSolutions)
     })
     var pointID = 0;
     var lineID = 0;
