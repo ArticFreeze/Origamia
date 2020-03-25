@@ -22,5 +22,6 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('game/', views.game_view),
     url('templevel/', views.temp_level),
-    url('', include('levels.urls'))
+    url('', include('levels.urls')),
+    url('', include('accounts.urls')),
 ]
