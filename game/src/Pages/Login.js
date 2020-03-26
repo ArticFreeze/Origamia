@@ -6,50 +6,44 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            errorText:"khkjkkbkbJHIKL"
+            errorText:""
         };
     }
 
-    submitLoginForm = (that) => async (event) => {
+    /**
+     * Event handler used to handle the login event
+     * @param event The login event
+     */
+    submitLoginForm = (event) => {
         event.preventDefault();
         const data = new FormData(event.target);
-        //var that = this;
-
-        //const resp = await fetch('http://127.0.0.1:8000/login');
-        //const resp = await res.json();
-        // TODO: implement CSRF here
-        const resp = await fetch('http://localhost:8000/login', {
+        var status = 0;
+        fetch("http://localhost:8000/login", {
             method: "post",
-            body: JSON.stringify(data),
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
+            body: data
+        }).then(response =>  {
+            status = response.status;
+            return response.json();
+        }).then(data => {
+           if (status == 200) {
+               // Login successful
+           } else {
+               // Login unsuccessful
+               if (typeof(data.non_field_errors) == "object") {
+                   this.setState({errorText: data.non_field_errors[0]});
+               } else {
+                   this.setState({errorText: "Unable to log in"});
+               }
+           }
+        }).catch(err => {
+            console.log(err);
         })
-//        .then((response) => {
-//            const resp = response;
-//            console.log(response);
-//        })
-        console.log(resp);
-        console.log(data);
-        if(resp.status == 200){
-            that.setState({
-            errorText: "Login Successful!"})
-        } else {
-           that.setState({
-               errorText: resp.nonFieldErrors})
-            }
     }
 
-    loginSuccess(){
-
-    }
-
-//TODO: implement error text
     render() {
         return (
             <div>
-                <form onSubmit={this.submitLoginForm(this)}>
+                <form onSubmit={this.submitLoginForm}>
                     <label htmlFor="username">Username: </label>
                     <input id="username" name="username" type="text" />
 
