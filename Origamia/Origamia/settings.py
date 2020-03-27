@@ -48,9 +48,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -75,6 +75,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'Origamia.wsgi.application'
 
 
@@ -97,6 +99,7 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://localhost:8080',
 )
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

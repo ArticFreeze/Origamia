@@ -4,9 +4,10 @@
   "private": true,
   "verbose": true,
   "dependencies": {
+    "js-cookie": "^2.2.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0",
+    "react-scripts": "^3.4.1",
     "unit.js": "^2.1.1"
   },
   "scripts": {

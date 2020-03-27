@@ -1,5 +1,6 @@
 // Cite: https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
 import React from 'react';
+import Cookies from 'js-cookie';
 
 class Login extends React.Component {
 
@@ -9,6 +10,16 @@ class Login extends React.Component {
             errorText:""
         };
     }
+
+    componentDidMount = () => {
+        fetch("http://localhost:8000/csrf").then(response => {
+            return response.json();
+        }).then(data => {
+            Cookies.set("csrfToken", data.csrfToken);
+        });
+    }
+
+    
 
     /**
      * Event handler used to handle the login event
@@ -20,6 +31,11 @@ class Login extends React.Component {
         var status = 0;
         fetch("http://localhost:8000/login", {
             method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrfToken')
+              },
             body: data
         }).then(response =>  {
             status = response.status;
@@ -27,6 +43,7 @@ class Login extends React.Component {
         }).then(data => {
            if (status == 200) {
                // Login successful
+               Cookies.set('session-id', data.token);
            } else {
                // Login unsuccessful
                if (typeof(data.non_field_errors) == "object") {
@@ -44,6 +61,7 @@ class Login extends React.Component {
         return (
             <div>
                 <form onSubmit={this.submitLoginForm}>
+                    <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrfToken")} />
                     <label htmlFor="username">Username: </label>
                     <input id="username" name="username" type="text" />
 
