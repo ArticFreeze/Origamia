@@ -8,7 +8,13 @@ from rest_framework.response import Response
 
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth import authenticate
+from django.core.exceptions import ValidationError
 
+import json
 
 class UserAPIView(generics.RetrieveAPIView):
     permission_classes = [
@@ -31,16 +37,22 @@ class RegisterAPIView(generics.GenericAPIView):
             "token": AuthToken.objects.create(user)[1]
         })
 
+@ensure_csrf_cookie
 def login_view(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        return Response({
-            "token": AuthToken.objects.create(user)[1]
-        })
-    else:
-        raise serializers.ValidationError("Incorrect username or password")
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data['username']
+        password = data['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            return JsonResponse({
+                "token": AuthToken.objects.create(user)[1]
+            })
+        else:
+            return JsonResponse({"error":"Incorrect username or password"}, status=400)
+    elif request.method == 'GET':
+        return JsonResponse({'csrfToken': get_token(request)})
+    
 
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer

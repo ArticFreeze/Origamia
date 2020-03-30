@@ -27,16 +27,26 @@ class Login extends React.Component {
      */
     submitLoginForm = (event) => {
         event.preventDefault();
-        const data = new FormData(event.target);
+        const target = event.target;
+        const formdata = new FormData(target);
+        const data = {
+            csrfmiddlewaretoken: formdata.get('csrfmiddlewaretoken'),
+            username: formdata.get('username'),
+            password: formdata.get('password')
+        }
+        console.log(data);
+        console.log(JSON.stringify(data));
+
         var status = 0;
         fetch("http://localhost:8000/login", {
             method: "post",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-CSRFToken': Cookies.get('csrfToken')
+                'X-CSRFToken': Cookies.get('csrftoken')
               },
-            body: data
+            body: JSON.stringify(data),
+            credentials: 'include'
         }).then(response =>  {
             status = response.status;
             return response.json();
@@ -46,8 +56,8 @@ class Login extends React.Component {
                Cookies.set('session-id', data.token);
            } else {
                // Login unsuccessful
-               if (typeof(data.non_field_errors) == "object") {
-                   this.setState({errorText: data.non_field_errors[0]});
+               if (typeof(data.error) == "string") {
+                   this.setState({errorText: data.error});
                } else {
                    this.setState({errorText: "Unable to log in"});
                }
@@ -61,7 +71,7 @@ class Login extends React.Component {
         return (
             <div>
                 <form onSubmit={this.submitLoginForm}>
-                    <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrfToken")} />
+                    <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrftoken")} />
                     <label htmlFor="username">Username: </label>
                     <input id="username" name="username" type="text" />
 
@@ -69,7 +79,7 @@ class Login extends React.Component {
                     <input id="password" name="password" type="password" />
 
                     {this.state.errorText}
-                    <button>Login</button>
+                    <input type="submit" value="submit" />
                 </form>
             </div>
         );
