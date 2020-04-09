@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import GameCanvas from './GameCanvas';
 import Login from './Pages/Login.js';
+import Register from './Pages/Register.js';
 
 class App extends Component {
     constructor(props) {
@@ -12,7 +13,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Login />
+                <Register />
             </div>
 
         );

@@ -1,8 +1,8 @@
-// Cite: https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
 import React from 'react';
 import Cookies from 'js-cookie';
 
-class Login extends React.Component {
+class Register extends React.Component {
+
 
     constructor(props) {
         super(props);
@@ -11,34 +11,20 @@ class Login extends React.Component {
         };
     }
 
-    componentDidMount = () => {
-        fetch("http://localhost:8000/csrf").then(response => {
-            return response.json();
-        }).then(data => {
-            Cookies.set("csrfToken", data.csrfToken);
-        });
-    }
-
-
-
-    /**
-     * Event handler used to handle the login event
-     * @param event The login event
-     */
-    submitLoginForm = (event) => {
+    submitRegistrationForm = (event) => {
         event.preventDefault();
         const target = event.target;
         const formdata = new FormData(target);
         const data = {
             csrfmiddlewaretoken: formdata.get('csrfmiddlewaretoken'),
             username: formdata.get('username'),
-            password: formdata.get('password')
+            password: formdata.get('password'),
+            password2: formdata.get('password2'),
+            email: formdata.get('email')
         }
-        console.log(data);
-        console.log(JSON.stringify(data));
 
-        var status = 0;
-        fetch("http://localhost:8000/login", {
+var status = 0;
+        fetch("http://localhost:8000/register", {
             method: "post",
             headers: {
                 'Accept': 'application/json',
@@ -52,14 +38,14 @@ class Login extends React.Component {
             return response.json();
         }).then(data => {
            if (status == 200) {
-               // Login successful
+               // Registration successful
                Cookies.set('session-id', data.token);
            } else {
                // Login unsuccessful
                if (typeof(data.error) == "string") {
                    this.setState({errorText: data.error});
                } else {
-                   this.setState({errorText: "Unable to log in"});
+                   this.setState({errorText: "Unable to register"});
                }
            }
         }).catch(err => {
@@ -70,13 +56,19 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.submitLoginForm}>
+                <form onSubmit={this.submitRegistrationForm}>
                     <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrftoken")} />
                     <label htmlFor="username">Username: </label>
                     <input id="username" name="username" type="text" />
 
                     <label htmlFor="password">Password: </label>
                     <input id="password" name="password" type="password" />
+
+                    <label htmlFor="password2">Confirm Password: </label>
+                    <input id="password2" name="password2" type="password" />
+
+                    <label htmlFor="email">Email: </label>
+                    <input id="text" name="email" type="text" />
 
                     {this.state.errorText}
                     <input type="submit" value="submit" />
@@ -87,4 +79,5 @@ class Login extends React.Component {
 
 }
 
-export default Login;
+export default Register;
+
