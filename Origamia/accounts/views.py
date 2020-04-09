@@ -12,6 +12,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 import json
@@ -25,17 +26,35 @@ class UserAPIView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-class RegisterAPIView(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
-        })
+# @ensure_csrf_cookie
+# class RegisterAPIView(generics.GenericAPIView):
+#     serializer_class = RegisterSerializer
+#
+#     def register(self, request, *args, **kwargs):
+#     #     serializer = self.get_serializer(data=request.data)
+#     #     serializer.is_valid(raise_exception=True)
+#     #     user = serializer.save()
+#     #     return Response({
+#     #         "user": UserSerializer(user, context=self.get_serializer_context()).data,
+#     #         "token": AuthToken.objects.create(user)[1]
+#     #     })
+#
+@ensure_csrf_cookie
+def register_view(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        username = data['username']
+        password = data['password']
+        email = data['email']
+        user = User.objects.create_user(username, email, password)
+        if user is not None:
+            return JsonResponse({
+                "token": AuthToken.objects.create(user)[1]
+            })
+        else:
+            return JsonResponse({"error":"Incorrect username or password"}, status=400)
+    elif request.method == 'GET':
+        return JsonResponse({'csrfToken': get_token(request)})
 
 @ensure_csrf_cookie
 def login_view(request):
