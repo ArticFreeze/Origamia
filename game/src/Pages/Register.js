@@ -53,6 +53,10 @@ var status = 0;
         })
     }
 
+    doLogin = (e) => {
+        this.props.doLogin();
+    }
+
     render() {
         return (
             <div>
@@ -73,6 +77,7 @@ var status = 0;
                     {this.state.errorText}
                     <input type="submit" value="submit" />
                 </form>
+                <button onClick={this.doLogin}>Log into existing account</button>
             </div>
         );
     }

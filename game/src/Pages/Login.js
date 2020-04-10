@@ -34,8 +34,7 @@ class Login extends React.Component {
             username: formdata.get('username'),
             password: formdata.get('password')
         }
-        console.log(data);
-        console.log(JSON.stringify(data));
+        const uname = data.username;
 
         var status = 0;
         fetch("http://localhost:8000/login", {
@@ -54,6 +53,8 @@ class Login extends React.Component {
            if (status == 200) {
                // Login successful
                Cookies.set('session-id', data.token);
+                
+             this.props.didLogIn(uname);
            } else {
                // Login unsuccessful
                if (typeof(data.error) == "string") {
@@ -65,6 +66,10 @@ class Login extends React.Component {
         }).catch(err => {
             console.log(err);
         })
+    }
+
+    doRegister = (e) => {
+        this.props.doRegister();
     }
 
     render() {
@@ -81,6 +86,7 @@ class Login extends React.Component {
                     {this.state.errorText}
                     <input type="submit" value="submit" />
                 </form>
+                <button onClick={this.doRegister}>Create Account</button>
             </div>
         );
     }
