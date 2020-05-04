@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    url('levels/templevel', views.LevelAPIView().as_view())
+    url('levels/templevel', views.LevelAPIView().as_view()),
+    url('levels/solve', views.solve_view),
 ]

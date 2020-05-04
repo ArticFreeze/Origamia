@@ -40,6 +40,15 @@ export class BasePoint extends DependentPoint {
         this.id = id;
     }
 
+    getData = () => {
+        return {
+            p: {
+                x: this.p.x,
+                y: this.p.y
+            },
+            id: this.id
+        };
+    }
 
     moveBasePoint = (point, id) => {
         if (this.id == id) {
@@ -73,6 +82,13 @@ export class FoldPoint extends DependentPoint {
         super();
         this.p = p;
         this.l = l;
+    }
+
+    getData = () => {
+        return {
+            p: this.p.getData(),
+            l: this.l.getData()
+        };
     }
 
     getPoint = () => {
@@ -134,6 +150,13 @@ export class IntersectPoint extends DependentPoint {
         super();
         this.l1 = l1;
         this.l2 = l2;
+    }
+
+    getData = () => {
+        return {
+            l1: this.l1.getData(),
+            l2: this.l2.getData()
+        };
     }
 
     getPoint = () => {

@@ -73,6 +73,8 @@ def login_view(request):
         return JsonResponse({'csrfToken': get_token(request)})
     
 
+
+
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 

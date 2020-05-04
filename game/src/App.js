@@ -51,7 +51,11 @@ class App extends Component {
             case ST_REGISTER:
                 return (<Register didLogIn={this.signedIn} doLogin={this.doLogin}/>);
             case ST_HOME:
-                return (<Logout username = {this.state.username} didLogOut={this.signedOut} />);
+                return (<div>
+                    <Logout username = {this.state.username} didLogOut={this.signedOut} />
+                    <GameCanvas />
+                </div>
+                );
         }
     }
 }

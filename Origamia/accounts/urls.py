@@ -9,5 +9,5 @@ urlpatterns = [
     url('user', UserAPIView.as_view()),
     url('register', register_view),
     url('login', login_view),
-    url('logout', LogoutView.as_view(), name='knox_logout')
+    url('logout', LogoutView.as_view(), name='knox_logout'),
 ]

@@ -7,6 +7,7 @@ import GameState from './models/GameState';
 import { BasePoint, IntersectPoint, FoldPoint } from './models/DependentPoint';
 import DependentLine, { BaseLine, ThroughLine, BetweenLine } from './models/DependentLine';
 import Tool, { IntersectTool, FoldTool, ThroughTool, BetweenTool, SelectSolutionTool } from './models/Tools';
+import Cookies from 'js-cookie';
 /**
  * The GameCanvas draws the points and lines and handles interactions to create new points and lines.
  */
@@ -50,7 +51,12 @@ class GameCanvas extends React.Component {
     }).catch(function (e) {
       console.log("failed to parse", e);
     });
-
+    fetch("http://127.0.0.1:8000/levels/solve", {
+      method: "GET",
+      credentials: 'include'
+    }).then(res => {
+      console.log(res);
+    });
     const levelData = JSON.parse(level.levelData)
 
 
@@ -141,6 +147,24 @@ class GameCanvas extends React.Component {
     }
   }
 
+  didWin = (solutionPoints, solutionLines) => {
+    const dsPoints = solutionPoints.map(p => p.getData());
+    const dsLines = solutionLines.map(l => l.getData());
+    fetch("http://localhost:8000/levels/solve", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': Cookies.get('csrftoken'),
+                'authorization': 'token '+Cookies.get('session-id')
+            },
+            body: JSON.stringify({points: dsPoints, lines: dsLines}),
+            credentials: 'include'
+        }).then(res => {
+      console.log(res);
+    });
+  }
+
   toolSelected = (tool) => (e) => {
     console.log(typeof (tool));
     this.setState({ selectedTool: tool });
@@ -156,7 +180,7 @@ class GameCanvas extends React.Component {
         <button name="foldTool" onClick={this.toolSelected(new FoldTool(this.viewModel))}>Fold Point</button>
         <button name="throughTool" onClick={this.toolSelected(new ThroughTool(this.viewModel))}>Fold through</button>
         <button name="betweenTool" onClick={this.toolSelected(new BetweenTool(this.viewModel))}>Fold Between</button>
-        <button name="SolutionCheck" onClick={this.toolSelected(new SelectSolutionTool(this.viewModel, this.state.solutions))}>Check Solution</button>
+        <button name="SolutionCheck" onClick={this.toolSelected(new SelectSolutionTool(this.viewModel, this.state.solutions, this.didWin))}>Check Solution</button>
       </div>
     )
   }

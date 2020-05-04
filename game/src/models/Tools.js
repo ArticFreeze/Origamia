@@ -214,9 +214,10 @@ export const checkSolution = (dSelPoints, dSelLines, solutions) => {
 }
 
 export class SelectSolutionTool extends Tool {
-    constructor(gameState, solutions) {
+    constructor(gameState, solutions, didWin) {
         super(gameState);
         this.solutions = solutions;
+        this.didWin = didWin;
     }
 
     doAction = (selPoints, selLines) => {
@@ -225,7 +226,7 @@ export class SelectSolutionTool extends Tool {
 
 
         if (checkSolution(dSelPoints, dSelLines, this.solutions)) {
-            alert("Congratulations! You've won!");
+            this.didWin(dSelPoints, dSelLines);
         }
 
         return { newPoints: [], newLines: [] };

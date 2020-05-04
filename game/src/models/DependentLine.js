@@ -28,12 +28,28 @@ export class BaseLine extends DependentLine {
 
     /**
      * Creates a BaseLine from a specified point
-     * @param {Point} l The line to store
+     * @param {Line} l The line to store
      */
     constructor(l, id) {
         super();
         this.l = l;
         this.id = id;
+    }
+
+    getData = () => {
+        return {
+            l: {
+                p1:{
+                    x: this.l.p1.x,
+                    y: this.l.p1.y
+                },
+                p2:{
+                    x: this.l.p2.x,
+                    y: this.l.p2.y
+                }
+            },
+            id: this.id
+        };
     }
 
 
@@ -67,6 +83,13 @@ export class ThroughLine extends DependentLine {
         super();
         this.p1 = p1;
         this.p2 = p2;
+    }
+
+    getData = () => {
+        return {
+            p1: this.p1.getData(),
+            p2: this.p2.getData()
+        };
     }
 
     getLine = () => {
@@ -105,6 +128,13 @@ export class BetweenLine extends DependentLine {
         super();
         this.p1 = p1;
         this.p2 = p2;
+    }
+
+    getData = () => {
+        return {
+            p1: this.p1.getData(),
+            p2: this.p2.getData()
+        };
     }
 
     getLine = () => {
