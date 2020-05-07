@@ -143,7 +143,11 @@ STATIC_URL = '/static/'
 # Permissions
 # TODO: Setup privileges once accounts are active (change to .isAuthenticated)
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.AllowAny'
+    # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'knox.auth.TokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication', 
+    )
 }

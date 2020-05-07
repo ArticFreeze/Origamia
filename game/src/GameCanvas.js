@@ -29,36 +29,17 @@ class GameCanvas extends React.Component {
 
   async componentDidMount() {
 
-    const res = await fetch('http://127.0.0.1:8000/levels/templevel');
-    //console.log(res);
-    const level = await res.json()
-
-
-    let jsondata;
-    fetch('http://127.0.0.1:8000/levels/templevel', {
+    const res = await fetch('http://127.0.0.1:8000/levels/level/?id='+this.props.levelID, {
       method: "get",
       //credentials: "same-origin",
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify()
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      jsondata = data;
-      console.log(data);
-    }).catch(function (e) {
-      console.log("failed to parse", e);
-    });
-    fetch("http://127.0.0.1:8000/levels/solve", {
-      method: "GET",
-      credentials: 'include'
-    }).then(res => {
-      console.log(res);
-    });
+        'authorization': 'token '+Cookies.get('session-id')
+      }});
+    //console.log(res);
+    const level = await res.json()
     const levelData = JSON.parse(level.levelData)
-
+      alert(level.task);
 
     this.setState({
       points: levelData.points.map(point => new Point(point.x, point.y)),
@@ -158,10 +139,12 @@ class GameCanvas extends React.Component {
                 'X-CSRFToken': Cookies.get('csrftoken'),
                 'authorization': 'token '+Cookies.get('session-id')
             },
-            body: JSON.stringify({points: dsPoints, lines: dsLines}),
+            body: JSON.stringify({levelID: this.props.levelID, points: dsPoints, lines: dsLines}),
             credentials: 'include'
         }).then(res => {
-      console.log(res);
+          if (res.status == 200) {
+            this.props.completedLevel();
+          }
     });
   }
 

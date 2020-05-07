@@ -5,16 +5,19 @@ import GameCanvas from './GameCanvas';
 import Login from './Pages/Login.js';
 import Register from './Pages/Register.js';
 import Logout from './Pages/Logout.js';
+import LevelMenu from './Pages/LevelMenu';
 const ST_LOGIN = 0;
 const ST_REGISTER = 1;
 const ST_HOME = 2;
+const ST_LEVEL = 3;
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
             loaded: ST_LOGIN,
-            username: ''
+            username: '',
+            levelID: 1
         }
     }
 
@@ -38,9 +41,23 @@ class App extends Component {
         });
     }
 
+    didSelectLevel = (id) => {
+        this.setState({
+            loaded: ST_LEVEL,
+            levelID: id
+        });
+    }
+
     doRegister = () => {
         this.setState({
             loaded: ST_REGISTER
+        });
+    }
+
+    completedLevel = () => {
+        this.setState({
+            loaded: ST_HOME,
+            levelID: 1
         });
     }
 
@@ -53,8 +70,15 @@ class App extends Component {
             case ST_HOME:
                 return (<div>
                     <Logout username = {this.state.username} didLogOut={this.signedOut} />
-                    <GameCanvas />
+                    <LevelMenu didSelectLevel={this.didSelectLevel} />
                 </div>
+                );
+            case ST_LEVEL:
+                 return (
+                    <div>
+                        <Logout username = {this.state.username} didLogOut={this.signedOut} />
+                        <GameCanvas levelID={this.state.levelID} completedLevel={this.completedLevel}/>
+                    </div>
                 );
         }
     }

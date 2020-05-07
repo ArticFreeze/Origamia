@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -22,3 +22,10 @@ class LevelModel(models.Model):
     starRequirement = models.IntegerField()
     starsAwarded = models.IntegerField()  # Number of stars awarded
 
+class LevelSolvedModel(models.Model):
+    # User who solved the level
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Level solved
+    level = models.ForeignKey(LevelModel, on_delete=models.CASCADE)
+    # Stars awarded for the solution
+    stars = models.IntegerField()

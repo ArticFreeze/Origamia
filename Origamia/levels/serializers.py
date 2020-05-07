@@ -7,5 +7,9 @@ from .models import LevelModel
 class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelModel
-        fields = ('name', 'task', 'levelData', 'steps', 'clientSolutions',
-                  'serverSolutions', 'hints', 'difficulty', 'starRequirement', 'starsAwarded')
+        fields = ('id', 'name', 'task', 'levelData', 'steps', 'clientSolutions', 'hints', 'difficulty', 'starRequirement', 'starsAwarded')
+
+class ServerLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LevelModel
+        fields = ('id', 'steps', 'serverSolutions', 'starRequirement', 'starsAwarded')
