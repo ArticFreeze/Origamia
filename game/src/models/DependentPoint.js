@@ -42,6 +42,7 @@ export class BasePoint extends DependentPoint {
 
     getData = () => {
         return {
+            type: "BasePoint",
             p: {
                 x: this.p.x,
                 y: this.p.y
@@ -86,6 +87,7 @@ export class FoldPoint extends DependentPoint {
 
     getData = () => {
         return {
+            type: "FoldPoint",
             p: this.p.getData(),
             l: this.l.getData()
         };
@@ -154,6 +156,7 @@ export class IntersectPoint extends DependentPoint {
 
     getData = () => {
         return {
+            type: "IntersectPoint",
             l1: this.l1.getData(),
             l2: this.l2.getData()
         };

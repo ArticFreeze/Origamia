@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.db.models import Sum
 
+from .SolutionCheck import *
 
 import json
 
@@ -72,17 +73,20 @@ def solve_view(request):
     user = request.user
     data = request.data
     level = LevelModel.objects.get(id=data['levelID'])
-    
+    serverSolutions = json.loads(level.serverSolutions)
 
+    if checkSolution(data['points'], data['lines'], serverSolutions):
+        newStars = level.starsAwarded
+        previousSolutions = LevelSolvedModel.objects.filter(user__exact=user, level__exact=level)
+        if len(previousSolutions) == 0:
+            LevelSolvedModel.objects.create(user=user, level=level, stars=level.starsAwarded)
+        else:
+            oldStars = previousSolutions[0].stars
+            if oldStars < newStars:
+                previousSolutions.update(stars=newStars)
 
-    # If solved
-    newStars = level.starsAwarded
-    previousSolutions = LevelSolvedModel.objects.filter(user__exact=user, level__exact=level)
-    if len(previousSolutions) == 0:
-        LevelSolvedModel.objects.create(user=user, level=level, stars=level.starsAwarded)
+        return JsonResponse({"solved":True})
     else:
-        oldStars = previousSolutions[0].stars
-        if oldStars < newStars:
-            previousSolutions.update(stars=newStars)
-
-    return JsonResponse({"solved":True})
+        return JSonResponse({"solved":False}, status=400)
+    # If solved
+    

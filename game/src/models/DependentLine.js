@@ -38,6 +38,7 @@ export class BaseLine extends DependentLine {
 
     getData = () => {
         return {
+            type: "BaseLine",
             l: {
                 p1:{
                     x: this.l.p1.x,
@@ -87,6 +88,7 @@ export class ThroughLine extends DependentLine {
 
     getData = () => {
         return {
+            type: "ThroughLine",
             p1: this.p1.getData(),
             p2: this.p2.getData()
         };
@@ -132,6 +134,7 @@ export class BetweenLine extends DependentLine {
 
     getData = () => {
         return {
+            type: "BetweenLine",
             p1: this.p1.getData(),
             p2: this.p2.getData()
         };

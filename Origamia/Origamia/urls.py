@@ -21,7 +21,6 @@ from . import views
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('game/', views.game_view),
-    url('templevel/', views.temp_level),
     url('csrf',views.csrf),
     url('', include('levels.urls')),
     url('', include('accounts.urls')),
