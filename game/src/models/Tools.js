@@ -100,7 +100,11 @@ export class ThroughTool extends Tool {
 const eps = .01;
 
 /**
- * Checks whether or not selected points and lines form a solution to a level.  This works by considering what happens when the base points and lines are repositioned and whether or not the dependent objects are appropriately positioned when this happens.  For example, a midpoint between two base points should remain approximately halfway between two base points (give or take floating point error).
+ * Checks whether or not selected points and lines form a solution to a level.  This works by considering what happens
+ * when the base points and lines are repositioned and whether or not the dependent objects are
+ * appropriately positioned when this happens.  For example, a midpoint between two base points
+ * should remain approximately halfway between two base points (give or take floating point error).
+ *
  * @param {[DependentPoint]} dSelPoints The selected points.
  * @param {[DependentLine]} dSelLines The selected lines.
  * @param {[Any]} solutions The solution cases to check.

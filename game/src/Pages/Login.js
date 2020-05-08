@@ -52,6 +52,7 @@ class Login extends React.Component {
         }).then(data => {
            if (status == 200) {
                // Login successful
+
                Cookies.set('session-id', data.token);
                 localStorage.setItem('token', data.token);
              this.props.didLogIn(uname);

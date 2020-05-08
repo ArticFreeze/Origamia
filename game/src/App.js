@@ -22,6 +22,7 @@ class App extends Component {
     }
 
     signedIn = (e) => {
+    console.log("Login Successful");
         this.setState({
             loaded: ST_HOME,
             username: e
