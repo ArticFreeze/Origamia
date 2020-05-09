@@ -59,20 +59,30 @@ var status = 0;
 
     render() {
         return (
+
             <div>
+                <h1>Registration</h1>
                 <form onSubmit={this.submitRegistrationForm}>
+                    <div class="row">
                     <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrftoken")} />
                     <label htmlFor="username">Username: </label>
                     <input id="username" name="username" type="text" />
+                    </div>
 
+                    <div class="row">
                     <label htmlFor="password">Password: </label>
                     <input id="password" name="password" type="password" />
+                    </div>
 
+                    <div class="row">
                     <label htmlFor="password2">Confirm Password: </label>
                     <input id="password2" name="password2" type="password" />
+                    </div>
 
+                    <div class="row">
                     <label htmlFor="email">Email: </label>
                     <input id="text" name="email" type="text" />
+                    </div>
 
                     {this.state.errorText}
                     <input type="submit" value="submit" />

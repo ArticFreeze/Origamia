@@ -9,7 +9,7 @@ class LevelMenuItem extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={this.props.levelSelected}>Lvel {this.props.id}: {this.props.lName} ({this.props.difficulty})</button>
+                <button onClick={this.props.levelSelected}>Level {this.props.id}: {this.props.lName} ({this.props.difficulty})</button>
             </div>
         )
     }

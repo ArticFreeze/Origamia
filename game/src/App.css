@@ -20,3 +20,32 @@
 .App-link {
   color: #09d3ac;
 }
+
+.log-box *, *:before, *:after {
+    box-sizing: border-box;
+}
+
+form {
+    border: 3px solid #f1f1f1;
+}
+
+input[type=text], input[type=password] {
+    padding:10px;
+    margin:10px 0;
+    border: 2px solid #eee;
+    display: inline-block;
+    box-shadow: 0 0 15px 4px rgba(0,0,0,0.06);
+    border-radius:10px;
+    background-color: #fafafa;
+}
+
+
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+}
+
+button:hover {
+    opacity: 0.8;
+}

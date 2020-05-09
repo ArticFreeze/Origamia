@@ -1,6 +1,7 @@
 // Cite: https://medium.com/@everdimension/how-to-handle-forms-with-just-react-ac066c48bd4f
 import React from 'react';
 import Cookies from 'js-cookie';
+import styles from '../App.css';
 
 class Login extends React.Component {
 
@@ -76,17 +77,23 @@ class Login extends React.Component {
     render() {
         return (
             <div>
-                <form onSubmit={this.submitLoginForm}>
-                    <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrftoken")} />
-                    <label htmlFor="username">Username: </label>
-                    <input id="username" name="username" type="text" />
+            <h1>Login</h1>
 
-                    <label htmlFor="password">Password: </label>
-                    <input id="password" name="password" type="password" />
+                    <form onSubmit={this.submitLoginForm}>
+                        <div class="row">
+                        <input type="hidden" name="csrfmiddlewaretoken" value={Cookies.get("csrftoken")} />
+                        <label htmlFor="username">Username: </label>
+                        <input id="username" name="username" type="text" />
+                        </div>
 
-                    {this.state.errorText}
-                    <input type="submit" value="submit" />
-                </form>
+                        <div class="row">
+                        <label htmlFor="password">Password: </label>
+                        <input id="password" name="password" type="password" />
+                        </div>
+
+                        {this.state.errorText}
+                        <input type="submit" value="submit" />
+                    </form>
                 <button onClick={this.doRegister}>Create Account</button>
             </div>
         );

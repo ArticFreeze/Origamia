@@ -157,6 +157,7 @@ class GameCanvas extends React.Component {
   render() {
     return (
       <div>
+      <h1>Game</h1>
         <canvas ref="canvas" width={640} height={600} onClick={this.userClicked} />
         <br />
         <button name="intersectTool" onClick={this.toolSelected(new IntersectTool(this.viewModel))}>Intersect</button>
